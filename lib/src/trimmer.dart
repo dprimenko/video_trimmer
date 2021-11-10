@@ -163,9 +163,9 @@ class Trimmer {
     String? customVideoFormat,
     int? fpsGIF,
     int? scaleGIF,
-    String? videoFolderName,
     String? videoFileName,
     StorageDir? storageDir,
+    String? path,
   }) async {
     final String _videoPath = currentVideoFile!.path;
     final String _videoName = basename(_videoPath).split('.')[0];
@@ -187,18 +187,9 @@ class Trimmer {
     debugPrint("DateTime: $dateTime");
     debugPrint("Formatted: $formattedDateTime");
 
-    videoFolderName ??= "Trimmer";
-
     videoFileName ??= "${_videoName}_trimmed:$formattedDateTime";
 
     videoFileName = videoFileName.replaceAll(' ', '_');
-
-    String path = await _createFolderInAppDocDir(
-      videoFolderName,
-      storageDir,
-    ).whenComplete(
-      () => debugPrint("Retrieved Trimmer folder"),
-    );
 
     Duration startPoint = Duration(milliseconds: startValue.toInt());
     Duration endPoint = Duration(milliseconds: endValue.toInt());
@@ -237,7 +228,7 @@ class Trimmer {
       _outputFormatString = customVideoFormat;
     }
 
-    _outputPath = '$path$videoFileName$_outputFormatString';
+    _outputPath = '$path/$videoFileName$_outputFormatString';
 
     _command += '"$_outputPath"';
 
